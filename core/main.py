@@ -3,9 +3,10 @@ import asyncio
 import logging
 import sys
 
-from aiogram import Dispatcher, Bot
+from aiogram import Dispatcher, Bot, F
 
 from handlers.basic import send_dice
+from handlers.git_issues import show_issues
 from project_config import config
 
 
@@ -27,6 +28,10 @@ async def stop_bot():
 
 
 async def main():
+    dp.message.register(
+        show_issues,
+        F.text == 'Good first issues'
+    )
     dp.message.register(send_dice)
 
     try:
