@@ -2,4 +2,4 @@ venv/
 dist/
 __pycache__/
 .idea/
-.env
+core/.env

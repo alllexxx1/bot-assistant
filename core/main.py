@@ -1,21 +1,16 @@
 import asyncio
 
 import logging
-import os
 import sys
 
 from aiogram import Dispatcher, Bot
 
 from handlers.basic import send_dice
-# from project_config import config
+from project_config import config
 
-from dotenv import load_dotenv
-load_dotenv()
-# BOT_TOKEN = config.bot_token.get_secret_value()
-# ADMIN_ID = config.admin_id.get_secret_value()
 
-BOT_TOKEN = os.getenv('BOT_TOKEN')
-ADMIN_ID = os.getenv('ADMIN_ID')
+BOT_TOKEN = config.bot_token.get_secret_value()
+ADMIN_ID = config.admin_id.get_secret_value()
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
