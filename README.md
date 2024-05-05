@@ -1,0 +1,1 @@
+[![Actions Status](https://github.com/alllexxx1/bot-assistant/workflows/CI/badge.svg)](https://github.com/alllexxx1/bot-assistant/actions)
