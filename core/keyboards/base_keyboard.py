@@ -6,6 +6,8 @@ def get_base_keyboard():
 
     keyboard_builder.button(text='Good first issues')
     keyboard_builder.button(text='Dice')
+    keyboard_builder.button(text='Timer')
+    keyboard_builder.button(text='Stop timer')
 
     keyboard_builder.adjust(2)
 
