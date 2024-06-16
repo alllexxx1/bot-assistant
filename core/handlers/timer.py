@@ -1,16 +1,20 @@
 import asyncio
+import os
 
 from aiogram import Bot
 from aiogram.types import Message, CallbackQuery
 
-from core.project_config import config
+# from project_config import config
 
 from core.keyboards.inline_for_timer import timer_keyboard
 
+import dotenv
+dotenv.load_dotenv()
 
 ACTIVE_USERS = set()
 
-BOT_TOKEN = config.bot_token.get_secret_value()
+# BOT_TOKEN = config.bot_token.get_secret_value()
+BOT_TOKEN = os.environ.get('BOT_TOKEN')
 
 bot = Bot(token=BOT_TOKEN)
 
