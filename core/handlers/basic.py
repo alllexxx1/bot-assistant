@@ -1,6 +1,9 @@
-from aiogram.enums import DiceEmoji
-from aiogram.types import Message
+from aiogram import enums, F, Router, types
 
 
-async def send_dice(message: Message):
-    await message.answer_dice(DiceEmoji.DICE)
+router = Router()
+
+
+@router.message(F.text == 'Dice')
+async def send_dice(message: types.Message):
+    await message.answer_dice(enums.DiceEmoji.DICE)

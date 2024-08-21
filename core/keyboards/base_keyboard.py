@@ -8,6 +8,9 @@ def get_base_keyboard():
     keyboard_builder.button(text='Dice')
     keyboard_builder.button(text='Timer')
     keyboard_builder.button(text='Stop timer')
+    keyboard_builder.button(text='Current utilities')
+    keyboard_builder.button(text='Last cost')
+    keyboard_builder.button(text='Utilities')
 
     keyboard_builder.adjust(2)
 

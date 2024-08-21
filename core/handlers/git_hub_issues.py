@@ -1,10 +1,25 @@
-from aiogram.types import Message
+from aiogram import F, Router, types
 
 import httpx
+
 
 URL = ('https://api.github.com/search/issues?'
        'q=label:%22good%20first%20issue%22+language:'
        'python+state:open&sort=created&order=desc&per_page=10')
+
+
+router = Router()
+
+
+@router.message(F.text == 'Good first issues')
+async def show_issues(message: types.Message):
+    issues = await fetch_issues()
+
+    if issues:
+        await message.answer(issues, parse_mode='HTML')
+    else:
+        await message.answer('An error has occurred. '
+                             'Try later')
 
 
 async def fetch_issues():
@@ -19,13 +34,3 @@ async def fetch_issues():
                  f"{issue['html_url']}" for issue in issues]
             )
             return issues_list
-
-
-async def show_issues(message: Message):
-    issues = await fetch_issues()
-
-    if issues:
-        await message.answer(issues, parse_mode='HTML')
-    else:
-        await message.answer('An error has occurred.'
-                             'Try later.')

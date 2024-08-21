@@ -1,27 +1,56 @@
 import asyncio
 import os
 
-from aiogram import Bot
-from aiogram.types import Message, CallbackQuery
-
-# from project_config import config
-
-from core.keyboards.inline_for_timer import timer_keyboard
+from aiogram import Bot, F, Router, types
 
 import dotenv
+
+from core.keyboards import inline_for_timer
+
+
 dotenv.load_dotenv()
+BOT_TOKEN = os.environ.get('BOT_TOKEN')
 
 ACTIVE_USERS = set()
 
-# BOT_TOKEN = config.bot_token.get_secret_value()
-BOT_TOKEN = os.environ.get('BOT_TOKEN')
-
+router = Router()
 bot = Bot(token=BOT_TOKEN)
 
 
-async def set_timer(message: Message):
+@router.message(F.text == 'Timer')
+async def set_timer(message: types.Message):
     await message.answer(text='Choose the timer duration',
-                         reply_markup=timer_keyboard())
+                         reply_markup=inline_for_timer.timer_keyboard())
+
+
+@router.callback_query(
+    lambda c: c.data in
+    [str(option) for option in inline_for_timer.TIME_OPTIONS]
+)
+async def process_timer_selection(callback_query: types.CallbackQuery):
+    selected_time = int(callback_query.data)
+    user_id = callback_query.from_user.id
+
+    ACTIVE_USERS.add(user_id)
+    task = asyncio.create_task(send_notification(  # noqa: F841
+        bot, user_id, selected_time
+    ))
+
+    await callback_query.message.answer(
+        f'Timer set to {selected_time} minutes'
+    )
+
+
+@router.message(F.text == 'Stop timer')
+async def stop_timer(message: types.Message):
+    user_id = message.from_user.id
+
+    if user_id in ACTIVE_USERS:
+        ACTIVE_USERS.remove(user_id)
+        await message.answer(text='You have made your choice...')
+
+    else:
+        await message.answer(text='You have no timers set up yet')
 
 
 async def send_notification(bot: Bot, user_id: id, minutes: int):
@@ -37,31 +66,3 @@ async def send_notification(bot: Bot, user_id: id, minutes: int):
 
     except asyncio.CancelledError:
         pass
-
-
-async def process_timer_selection(callback_query: CallbackQuery):
-    selected_time = int(callback_query.data)
-    user_id = callback_query.from_user.id
-
-    if user_id in ACTIVE_USERS:
-        ACTIVE_USERS.remove(user_id)
-
-    task = asyncio.create_task(send_notification(  # noqa: F841
-        bot, user_id, selected_time
-    ))
-    ACTIVE_USERS.add(user_id)
-
-    await callback_query.message.answer(
-        f'Timer set to {selected_time} minutes'
-    )
-
-
-async def stop_timer(message: Message):
-    user_id = message.from_user.id
-
-    if user_id in ACTIVE_USERS:
-        ACTIVE_USERS.remove(user_id)
-        await message.answer(text='You have made your choice...')
-
-    else:
-        await message.answer(text='You have no timers set up yet')
