@@ -9,8 +9,8 @@ from aiogram.fsm.state import State, StatesGroup
 router = Router()
 
 
-UTILITIES = [60.149, 38.415, 548.13, 287.12, 644.57]
-COEFFICIENTS = [50.93, 202.79, 8.23, 2.62, 5.66]
+UTILITIES = [79.400, 48.621, 5.5394, 757.64, 371.35, 961.22]
+COEFFICIENTS = [59.80, 234.56, 2803.24, 8.94, 3.02, 6.15]
 LATEST_COST = 2500.00
 
 
@@ -23,7 +23,7 @@ async def set_meters_values(message: types.Message, state: FSMContext):
     await message.answer(
         'Hello, drop your figures here in '
         'the following format: \n\n'
-        '65.857\n40.407\n645.53\n318.76\n810.72\n\n'
+        '65.857\n40.407\n5.5394\n645.53\n318.76\n810.72\n\n'
         'Enter /cancel to roll back'
     )
 
@@ -46,7 +46,7 @@ async def get_utilities(message: types.Message, state: FSMContext):
     try:
         utilities = list(map(float, message.text.split()))
 
-        if len(utilities) != 5:
+        if len(utilities) != 6:
             await message.answer('Take a close look at an example format')
 
         else:
@@ -70,10 +70,11 @@ async def get_utilities(message: types.Message, state: FSMContext):
 async def get_current_utilities(message: types.Message):
     current_utilities = (
         f'ХВ - {UTILITIES[0]}\n'
-        f'ГВ - {UTILITIES[1]}\n\n'
-        f'Т1 - {UTILITIES[2]}\n'
-        f'Т2 - {UTILITIES[3]}\n'
-        f'Т3 - {UTILITIES[4]}\n'
+        f'ГВ - {UTILITIES[1]}\n'
+        f'О - {UTILITIES[2]}\n\n'
+        f'Т1 - {UTILITIES[3]}\n'
+        f'Т2 - {UTILITIES[4]}\n'
+        f'Т3 - {UTILITIES[5]}\n'
     )
     await message.answer(current_utilities)
 
