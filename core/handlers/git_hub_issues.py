@@ -1,11 +1,13 @@
-from aiogram import F, Router, types
+import asyncio
 
 import httpx
+from aiogram import F, Router, types
 
-
-URL = ('https://api.github.com/search/issues?'
-       'q=label:%22good%20first%20issue%22+language:'
-       'python+state:open&sort=created&order=desc&per_page=10')
+URL = (
+    'https://api.github.com/search/issues?'
+    'q=label:%22good%20first%20issue%22+language:'
+    'python+state:open&sort=created&order=desc&per_page=10'
+)
 
 
 router = Router()
@@ -18,8 +20,7 @@ async def show_issues(message: types.Message):
     if issues:
         await message.answer(issues, parse_mode='HTML')
     else:
-        await message.answer('An error has occurred. '
-                             'Try later')
+        await message.answer('An error has occurred. ' 'Try later')
 
 
 async def fetch_issues():
@@ -30,7 +31,9 @@ async def fetch_issues():
             data = response.json()
             issues = data.get('items', [])
             issues_list = '\n'.join(
-                [f"<b>{issue['title']}</b> — "
-                 f"{issue['html_url']}" for issue in issues]
+                [
+                    f"<b>{issue['title']}</b> — " f"{issue['html_url']}"
+                    for issue in issues
+                ]
             )
             return issues_list

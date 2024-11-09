@@ -1,16 +1,13 @@
 import logging
 import os
 
+import dotenv
 from aiogram import Bot, Router, types
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-
 from openai import AsyncOpenAI, AuthenticationError, BadRequestError
-
-import dotenv
-
 
 dotenv.load_dotenv()
 
@@ -23,8 +20,9 @@ GPT_MODEL = 'gpt-4o'
 DALLE_MODEL = 'dall-e-3'
 
 
-client = AsyncOpenAI(api_key=PROXY_API_TOKEN,
-                     base_url='https://api.proxyapi.ru/openai/v1')
+client = AsyncOpenAI(
+    api_key=PROXY_API_TOKEN, base_url='https://api.proxyapi.ru/openai/v1'
+)
 
 
 router = Router()
@@ -51,12 +49,14 @@ async def enter_chatgpt_mode(message: types.Message, state: FSMContext):
         return
 
     else:
-        await message.answer('You are now in ChatGPT mode. '
-                             'Send me a message, and I will reply '
-                             'using ChatGPT. Send /cancel '
-                             'to exit this mode.\n\n'
-                             'Enter /clear_context to '
-                             'start conversation over')
+        await message.answer(
+            'You are now in ChatGPT mode. '
+            'Send me a message, and I will reply '
+            'using ChatGPT. Send /cancel '
+            'to exit this mode.\n\n'
+            'Enter /clear_context to '
+            'start conversation over'
+        )
         await state.set_state(AIState.gpt)
 
 
@@ -79,7 +79,7 @@ async def handle_chatgpt_message(message: types.Message):
         response = await client.chat.completions.create(
             messages=[
                 {'role': 'assistant', 'content': reference.response},
-                {'role': 'user', 'content': user_message}
+                {'role': 'user', 'content': user_message},
             ],
             model=GPT_MODEL,
         )
@@ -87,7 +87,7 @@ async def handle_chatgpt_message(message: types.Message):
         reference.response = response.choices[0].message.content
         await message.answer(reference.response, parse_mode='Markdown')
 
-    except (AuthenticationError or BadRequestError or TelegramBadRequest):
+    except AuthenticationError or BadRequestError or TelegramBadRequest:
         await message.answer('Something has gone wrong')
 
 
@@ -109,10 +109,12 @@ async def enter_dalle_mode(message: types.Message, state: FSMContext):
         return
 
     else:
-        await message.answer('You are now in DALL-E mode. '
-                             'Send me a message, and I will generate '
-                             'a picture for you. Send /cancel '
-                             'to exit this mode')
+        await message.answer(
+            'You are now in DALL-E mode. '
+            'Send me a message, and I will generate '
+            'a picture for you. Send /cancel '
+            'to exit this mode'
+        )
         await state.set_state(AIState.dalle)
 
 
@@ -134,19 +136,18 @@ async def handle_dalle_message(message: types.Message):
 
     try:
         response = await client.images.generate(
-            model=DALLE_MODEL,
-            prompt=user_message,
-            n=1,
-            size='1024x1024'
+            model=DALLE_MODEL, prompt=user_message, n=1, size='1024x1024'
         )
         logging.info(response)
         image_url = response.data[0].url
         photo = types.URLInputFile(image_url)
-        await bot.send_photo(message.chat.id,
-                             photo=photo,
-                             caption='Here is your generated image')
+        await bot.send_photo(
+            message.chat.id,
+            photo=photo,
+            caption='Here is your generated image',
+        )
 
-    except (AuthenticationError or BadRequestError or TelegramBadRequest):
+    except AuthenticationError or BadRequestError or TelegramBadRequest:
         await message.answer('Something has gone wrong')
 
 

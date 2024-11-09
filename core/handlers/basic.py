@@ -1,5 +1,4 @@
-from aiogram import enums, F, Router, types
-
+from aiogram import F, Router, enums, types
 
 router = Router()
 

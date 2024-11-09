@@ -1,13 +1,11 @@
 import os
 
+import dotenv
 from aiogram import Bot, Router, types
 from aiogram.filters import CommandStart
 
-import dotenv
-
 from core.keyboards.base_keyboard import get_base_keyboard
 from core.utils.commands import set_commands
-
 
 dotenv.load_dotenv()
 
@@ -32,11 +30,15 @@ async def stop_bot():
 
 @router.message(CommandStart())
 async def cmd_start(message: types.Message):
-    await message.answer(f'Hello, {message.from_user.full_name} !',
-                         reply_markup=get_base_keyboard())
+    await message.answer(
+        f'Hello, {message.from_user.full_name} !',
+        reply_markup=get_base_keyboard(),
+    )
 
 
 @router.message()
 async def handle_other_messages(message: types.Message):
-    await message.answer('I have not got a slightest idea what '
-                         'I am supposed to answer. Try something else')
+    await message.answer(
+        'I have not got a slightest idea what '
+        'I am supposed to answer. Try something else'
+    )

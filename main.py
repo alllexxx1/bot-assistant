@@ -3,18 +3,12 @@ import logging
 import os
 import sys
 
-from aiogram import Dispatcher, Bot
+import dotenv
+from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 
 from ai_assistants.handlers import ai_assistants
-from core.handlers import basic
-from core.handlers import git_hub_issues
-from core.handlers import timer
-from core.handlers import utilities
-from core.handlers import managing
-
-import dotenv
-
+from core.handlers import basic, git_hub_issues, managing, timer, utilities
 
 dotenv.load_dotenv()
 

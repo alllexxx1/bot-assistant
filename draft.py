@@ -1,13 +1,15 @@
-import openai
 import os
+
 import dotenv
+import openai
 
 dotenv.load_dotenv()
 
 # Playing around with OpenAI API
 api_key = os.environ.get('OPENAI_API_TOKEN')
-client = openai.OpenAI(api_key=api_key,
-                       base_url='https://api.proxyapi.ru/openai/v1')  # client for getting access to API through ProxyAPI
+client = openai.OpenAI(
+    api_key=api_key, base_url='https://api.proxyapi.ru/openai/v1'
+)  # client for getting access to API through ProxyAPI
 # client = openai.OpenAI(api_key=openai_api_key)  # client for direct API
 
 # ChatGPT API request
@@ -29,9 +31,6 @@ client = openai.OpenAI(api_key=api_key,
 # print(picture.data[0].url)
 
 
-
-
-
 # Handler that sends a picture
 # @dp.message(F.text.casefold() == 'generate')
 # async def send_picture(message: Message):
@@ -39,9 +38,6 @@ client = openai.OpenAI(api_key=api_key,
 #         photo = URLInputFile('https://upload.wikimedia.org/wikipedia/commons/7/78/Image.jpg')
 #         # photo = FSInputFile(image_path)
 #         await message.answer_photo(photo=photo, caption='Here is your generated image')
-
-
-
 
 
 # Integration ChatGPT and DALL-E (logic and handlers)

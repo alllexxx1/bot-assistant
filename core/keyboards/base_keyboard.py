@@ -17,5 +17,5 @@ def get_base_keyboard():
     return keyboard_builder.as_markup(
         resize_keyboard=True,
         one_time_keyboard=False,
-        input_field_placeholder='Opt for an option'
+        input_field_placeholder='Opt for an option',
     )
