@@ -1,5 +1,3 @@
-import asyncio
-
 import httpx
 from aiogram import F, Router, types
 

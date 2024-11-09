@@ -32,9 +32,7 @@ async def process_timer_selection(callback_query: types.CallbackQuery):
     user_id = callback_query.from_user.id
 
     ACTIVE_USERS.add(user_id)
-    asyncio.create_task(
-        send_notification(bot, user_id, selected_time)
-    )
+    asyncio.create_task(send_notification(bot, user_id, selected_time))
 
     await callback_query.message.answer(
         f'Timer set to {selected_time} minutes'
